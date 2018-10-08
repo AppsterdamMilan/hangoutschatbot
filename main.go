@@ -23,6 +23,8 @@ func main() {
 		log.Fatal(err)
 	}
 
+	cs.RegisterPlugin(new(HelloWorldPlugin))
+
 	// start chat service
 	log.Fatal(cs.Serve())
 }
