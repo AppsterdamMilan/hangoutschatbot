@@ -3,15 +3,11 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-  build:
+  test:
     docker:
       # specify the version
       - image: circleci/golang:1.10
 
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: /go/src/github.com/AppsterdamMilan/hangoutschatbot
     steps:
       - checkout
@@ -23,6 +19,9 @@ jobs:
       # run tests (if any...)
       - run: go test -v ./...
 
+  build:
+    machine: true
+    steps:
       # build and push docker image
       - run: make docker-build
       - run: make docker-push
@@ -31,7 +30,10 @@ workflows:
   version: 2
   on-commit:
     jobs:
-      - build:
+      - test:
           filters:
             branches:
               only: /.*/
+      - build:
+          requires:
+            - test
