@@ -22,6 +22,8 @@ jobs:
   build:
     machine: true
     steps:
+      - checkout
+
       # build and push docker image
       - run: make docker-build
       - run: make docker-push
